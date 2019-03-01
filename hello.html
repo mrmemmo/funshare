@@ -1,11 +1,135 @@
+<!DOCTYPE html>
 <html>
 <head>
-    
+    <meta charset="utf-8" />
+    <title>Ball Pop Game</title>
+          <meta name="viewport" content=" initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+    <style>
+    	* { padding: 0; margin: 0; }
+    	canvas { background: #ccffbb; display: block; margin: 0 auto; }
+        html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+}
+    </style>
 </head>
+<body onload="startUp()" >
+
+
+<canvas id="myCanvas" ></canvas>
+
+<script>
+    //class variables
     
-    <body>
-   <h1>Hello All</h1> 
-    </body>
+	var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+	
+    var bub = [];
+    var makeBub=false;
+    var mouseDown = false;
+    var mouseX = 0;
+    var mouseY = 0;
+    
+    //  startUp();
+    
+     function startUp() {
+      
+        ctx.canvas.width  = window.innerWidth;
+        ctx.canvas.height = 550;//window.innerHeight;
+          canvas.addEventListener("mousedown", doMouseDown,false);
+          canvas.addEventListener("mouseup", doMouseUp,false);
+        
+    }//END OF STARUP
+    
+//mouse click detection
+    function doMouseDown(e){
+        canvas_x = e.pageX;
+        canvas_y = e.pageY;
+         mouseX = canvas_x;
+        mouseY = canvas_y;
+         mouseDown = true;
+                    //mouseclick code here
+                 makeBub=true;
+        
+    }
+    
+               
+      function doMouseUp(e){
 
+              makeBub=false;
+            mouseDown = false;
+   }
+    
 
+    
+    
+    function draw() {
+       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //draw method
+        for(var i=0; i<bub.length;i++){
+            ctx.beginPath();
+            ctx.arc(bub[i].bx, bub[i].by, bub[i].sz, 0, 2 * Math.PI);
+            var cc = "rgb("+bub[i].c1+","+bub[i].c2+","+bub[i].c3+")";
+            
+            ctx.fillStyle = cc;
+            ctx.fill();
+            ctx.stroke();
+       }
+       moveBall();
+
+     }//end of draw function
+    
+    
+   
+    setInterval(draw, 30);
+    
+    
+function moveBall(){
+  
+  for(var i=0;i<bub.length; i++){
+    bub[i].bx += bub[i].xs;
+    bub[i].by += bub[i].ys;
+  }
+  
+  if(makeBub==true){
+    newBubble();
+  }
+}
+   
+function newBubble(){
+  var sz = Math.floor(Math.random() * 40) + 5;
+  
+  var c1 = Math.floor(Math.random() * 255); 
+  var c2 =Math.floor(Math.random() * 255); 
+  var c3 = Math.floor(Math.random() * 255);
+    var speed = Math.floor(Math.random()*3);
+    if(speed==0){
+       speed=0.3;
+       }
+    if(Math.floor(Math.random() * 2)==1){
+        speed = speed * -1;
+    }
+    var speedy =  Math.floor(Math.random()*4);
+    if(speedy==0){
+       speedy=0.3;
+       }
+    if(Math.floor(Math.random() * 2)==1){
+        speedy = speedy * -1;
+    }
+  var b = {bx:mouseX, by:mouseY, sz:sz, xs:speed,ys:speedy,
+           c1:c1,c2:c2,c3:c3};
+  bub.push(b);
+  
+  if(bub.length>200){
+    bub=[];
+  }
+}
+    
+    
+</script>
+
+</body>
 </html>
